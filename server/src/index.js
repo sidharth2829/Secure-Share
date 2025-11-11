@@ -56,21 +56,25 @@ app.get('/s/:id', (req, res) => {
           background: #f8f9fa; 
           border: 2px dashed #dee2e6; 
           border-radius: 12px; 
-          padding: 30px; 
+          padding: 20px; 
           margin: 20px 0;
-          min-height: 120px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          min-height: 80px;
           position: relative;
         }
         .secret-text {
-          font-family: 'Courier New', monospace;
-          font-size: 16px;
-          line-height: 1.5;
+          font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+          font-size: 15px;
+          line-height: 1.4;
           word-break: break-word;
           white-space: pre-wrap;
-          color: #333;
+          color: #2d3748;
+          background: white;
+          padding: 16px;
+          border-radius: 8px;
+          border: 1px solid #e2e8f0;
+          margin: 10px 0;
+          max-height: 200px;
+          overflow-y: auto;
         }
         .button { 
           background: #6750A4; 
@@ -91,10 +95,11 @@ app.get('/s/:id', (req, res) => {
           background: #fff3cd;
           border: 1px solid #ffeaa7;
           color: #856404;
-          padding: 15px;
+          padding: 12px;
           border-radius: 8px;
           margin: 20px 0;
-          font-size: 14px;
+          font-size: 13px;
+          text-align: center;
         }
         .error {
           background: #f8d7da;
@@ -105,21 +110,29 @@ app.get('/s/:id', (req, res) => {
           margin: 20px 0;
         }
         .success {
-          background: #d1edff;
-          border: 1px solid #b8daff;
-          color: #004085;
-          padding: 15px;
-          border-radius: 8px;
-          margin: 20px 0;
+          background: #f0fff4;
+          border: 1px solid #9ae6b4;
+          color: #2f855a;
+          padding: 8px 12px;
+          border-radius: 6px;
+          margin: 10px 0 5px 0;
+          font-size: 13px;
+          text-align: center;
         }
         .loading { color: #6c757d; }
         .copy-btn {
-          background: #28a745;
+          background: #48bb78;
+          color: white;
+          border: none;
           font-size: 14px;
-          padding: 8px 16px;
-          margin-top: 10px;
+          font-weight: 600;
+          padding: 10px 16px;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: background 0.3s;
+          margin-top: 8px;
         }
-        .copy-btn:hover { background: #218838; }
+        .copy-btn:hover { background: #38a169; }
         .footer {
           margin-top: 30px;
           font-size: 12px;
@@ -139,7 +152,7 @@ app.get('/s/:id', (req, res) => {
         </div>
 
         <div class="warning">
-          ⚠️ <strong>One-time view:</strong> This secret will be permanently deleted after viewing!
+          ⚠️ <strong>One-time view:</strong> Will be deleted after viewing!
         </div>
 
         <div id="content">
@@ -222,9 +235,9 @@ app.get('/s/:id', (req, res) => {
 
             // Show the decrypted secret
             content.innerHTML = \`
-              <div class="success">✅ Secret successfully decrypted and retrieved!</div>
+              <div class="success">✅ Decrypted successfully</div>
               <div class="secret-text">\${escapeHtml(plaintext)}</div>
-              <button class="copy-btn" onclick="copySecret()">📋 Copy to Clipboard</button>
+              <button class="copy-btn" onclick="copySecret()">📋 Copy</button>
             \`;
             
             button.style.display = 'none';
