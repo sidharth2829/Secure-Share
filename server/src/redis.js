@@ -44,7 +44,11 @@ function createMemoryClient () {
 
 export async function createClient () {
   if (client) return client
-  const url = process.env.REDIS_URL || 'redis://127.0.0.1:6379'
+  let url = process.env.REDIS_URL || 'memory://' // Default to memory store
+  
+  console.log('REDIS_URL from env:', process.env.REDIS_URL)
+  console.log('Using Redis URL:', url)
+  
   if (url.startsWith('memory://')) {
     client = createMemoryClient()
     console.log('Using in-memory store (development)')
