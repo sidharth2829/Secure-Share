@@ -24,12 +24,18 @@ router.post('/secret', async (req, res) => {
 
   try {
     const redis = getClient()
-    await redis.set(key, JSON.stringify({ cipherText, iv }), 'EX', ttl)
+    console.log('Redis client type:', redis.constructor.name)
+    console.log('Setting key:', key, 'with TTL:', ttl)
+    
+    const result = await redis.set(key, JSON.stringify({ cipherText, iv }), 'EX', ttl)
+    console.log('Redis set result:', result)
+    
     const expiresAt = Date.now() + ttl * 1000
     res.json({ id, expiresAt })
   } catch (e) {
-    console.error('Failed to store secret', e)
-    res.status(500).json({ error: 'Internal error' })
+    console.error('Failed to store secret:', e)
+    console.error('Error details:', e.message, e.stack)
+    res.status(500).json({ error: 'Internal error', details: e.message })
   }
 })
 

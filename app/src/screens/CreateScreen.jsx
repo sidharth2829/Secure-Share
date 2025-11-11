@@ -37,8 +37,18 @@ export default function CreateScreen () {
       const url = buildShareUrl(baseUrl, resp.data.id, keyB64, ivB64)
       setShareUrl(url)
     } catch (e) {
-      console.error(e)
-      setError('Failed to create secret')
+      console.error('Create secret error:', e)
+      console.error('Error response:', e.response?.data)
+      console.error('Error message:', e.message)
+      console.error('API URL being used:', (Constants.expoConfig?.extra?.API_URL || 'http://localhost:4000') + '/api')
+      
+      let errorMessage = 'Failed to create secret'
+      if (e.response?.data?.error) {
+        errorMessage = e.response.data.error
+      } else if (e.message) {
+        errorMessage = `Network error: ${e.message}`
+      }
+      setError(errorMessage)
     }
   }
 
