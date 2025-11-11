@@ -19,8 +19,8 @@ export default function App () {
   const linking = {
     prefixes: [
       Linking.createURL('/'),
-      // On web, allow direct navigation like http://localhost:8081/s/<id>
-      ...(typeof window !== 'undefined' ? [window.location.origin] : [])
+      // Add web prefixes only in web environment
+      ...(typeof window !== 'undefined' && window.location ? [window.location.origin] : [])
     ],
     config: {
       screens: {

@@ -23,9 +23,18 @@ export default ({ config }) => ({
     permissions: [
       'USE_BIOMETRIC',
       'USE_FINGERPRINT',
-      'INTERNET'
+      'INTERNET',
+      'ACCESS_NETWORK_STATE'
     ],
-    usesCleartextTraffic: true
+    usesCleartextTraffic: true,
+    networkSecurityConfig: {
+      'domain-config': [
+        {
+          domain: 'secure-share-production-38a5.up.railway.app',
+          'trust-anchors': ['system']
+        }
+      ]
+    }
   },
   plugins: [
     'expo-font'

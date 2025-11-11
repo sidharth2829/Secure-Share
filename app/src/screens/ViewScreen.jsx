@@ -19,7 +19,7 @@ export default function ViewScreen ({ route }) {
       return
     }
     // If we navigated to /s/:id on web, reconstruct a full share URL using current location hash if present
-    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+    if (Platform.OS === 'web' && typeof window !== 'undefined' && window.location) {
       const idFromPath = window.location.pathname.split('/').filter(Boolean).pop()
       const hash = window.location.hash
       if (idFromPath && hash) {
