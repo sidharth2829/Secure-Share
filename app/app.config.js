@@ -56,7 +56,7 @@ export default ({ config }) => ({
   extra: {
     API_URL: process.env.API_URL || 'https://secure-share-production-38a5.up.railway.app',
     eas: {
-      projectId: '8d743fc4-555b-4cdc-b260-ae7e9c0ac46e'
+      projectId: '83681651-9252-4edc-a6a2-402c0ebc2947'
     }
   }
 })
