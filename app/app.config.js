@@ -20,6 +20,10 @@ export default ({ config }) => ({
         NSAllowsArbitraryLoads: true,
         NSAllowsArbitraryLoadsInWebContent: true
       }
+      ,
+      // Required so iOS permits biometric-protected SecureStore operations
+      // (used when calling SecureStore.setItemAsync with { requireAuthentication: true }).
+      NSFaceIDUsageDescription: 'Use Face ID or Touch ID to unlock saved secrets securely.'
     }
   },
   android: {

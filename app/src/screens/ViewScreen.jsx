@@ -3,7 +3,7 @@ import { View, ScrollView } from 'react-native'
 import { Button, TextInput, Text, HelperText, Card } from 'react-native-paper'
 import * as LocalAuthentication from 'expo-local-authentication'
 import * as SecureStore from 'expo-secure-store'
-import { Platform } from 'react-native'
+import { Platform, Alert } from 'react-native'
 import { api } from '../lib/api'
 import { parseShareUrl, decryptAesCbc } from '../lib/crypto'
 
@@ -56,9 +56,32 @@ export default function ViewScreen ({ route }) {
 
   const saveOffline = async () => {
     try {
-      await SecureStore.setItemAsync(`secret:${Date.now()}`, plaintext, { requireAuthentication: true })
+      if (!plaintext) {
+        Alert.alert('Nothing to save', 'There is no decrypted secret to save offline.')
+        return
+      }
+
+      // SecureStore keys may only contain alphanumeric characters, '.', '-', and '_'
+      // Avoid using ':' which is invalid on some platforms/backends.
+      const key = `secret_${Date.now()}`
+
+      await SecureStore.setItemAsync(key, plaintext, { requireAuthentication: true })
+
+      // Update index of saved keys
+      try {
+        const idxJson = await SecureStore.getItemAsync('secrets_index')
+        const idx = idxJson ? JSON.parse(idxJson) : []
+        idx.push({ key, createdAt: Date.now() })
+        await SecureStore.setItemAsync('secrets_index', JSON.stringify(idx))
+      } catch (e) {
+        // Non-fatal: index update failed
+        console.warn('Failed to update secrets_index', e)
+      }
+
+      Alert.alert('Saved', 'Secret saved securely for offline access.')
     } catch (e) {
       console.error(e)
+      Alert.alert('Save failed', e.message || 'Failed to save secret offline.')
     }
   }
 
@@ -68,15 +91,7 @@ export default function ViewScreen ({ route }) {
         <Card.Title title="View Secret" subtitle="Paste link or open from a SecureShare URL" />
         <Card.Content style={{ gap: 12 }}>
           <TextInput label="Share URL" value={url} onChangeText={setUrl} autoCapitalize='none' mode="outlined" />
-          <Button 
-            mode="contained" 
-            onPress={viewSecret} 
-            loading={loading} 
-            disabled={!url || loading}
-            contentStyle={{ height: 40 }}
-          >
-            Fetch & Decrypt
-          </Button>
+          <Button mode="contained" onPress={viewSecret} loading={loading} disabled={!url || loading}>Fetch & Decrypt</Button>
           {error ? <HelperText type="error">{error}</HelperText> : null}
         </Card.Content>
       </Card>
@@ -86,13 +101,7 @@ export default function ViewScreen ({ route }) {
           <Card.Title title="Decrypted Secret" />
           <Card.Content style={{ gap: 12 }}>
             <TextInput value={plaintext} multiline editable={false} mode="outlined" />
-            <Button 
-              mode="elevated" 
-              onPress={saveOffline}
-              contentStyle={{ height: 40 }}
-            >
-              Save Offline (Secure)
-            </Button>
+            <Button mode="elevated" onPress={saveOffline}>Save Offline (Secure)</Button>
           </Card.Content>
         </Card>
       ) : null}

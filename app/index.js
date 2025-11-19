@@ -12,6 +12,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import HomeScreen from './src/screens/HomeScreen'
 import CreateScreen from './src/screens/CreateScreen'
 import ViewScreen from './src/screens/ViewScreen'
+import SavedSecrets from './src/screens/SavedSecrets'
 
 const Stack = createNativeStackNavigator()
 
@@ -45,6 +46,7 @@ export default function App () {
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Create" component={CreateScreen} />
             <Stack.Screen name="View" component={ViewScreen} />
+            <Stack.Screen name="Saved" component={SavedSecrets} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
