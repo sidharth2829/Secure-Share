@@ -43,8 +43,15 @@ export default function CreateScreen () {
       console.error('API URL being used:', (Constants.expoConfig?.extra?.API_URL || 'http://localhost:4000') + '/api')
       
       let errorMessage = 'Failed to create secret'
+      
       if (e.response?.data?.error) {
         errorMessage = e.response.data.error
+      } else if (e.code === 'NETWORK_ERROR' || e.message?.includes('Network Error')) {
+        errorMessage = 'Network connection failed. Please check your internet connection and try again.'
+      } else if (e.code === 'ECONNABORTED' || e.message?.includes('timeout')) {
+        errorMessage = 'Request timed out. Please check your internet connection and try again.'
+      } else if (e.message?.includes('ENOTFOUND')) {
+        errorMessage = 'Unable to reach server. Please check your internet connection.'
       } else if (e.message) {
         errorMessage = `Network error: ${e.message}`
       }
@@ -77,7 +84,12 @@ export default function CreateScreen () {
             <Text selectable style={{ fontSize: 12, opacity: 0.7, textAlign: 'center' }}>{shareUrl}</Text>
             <Button mode="elevated" onPress={copyUrl}>Copy Link</Button>
             <Divider style={{ width: '100%' }} />
-            <QRCode value={shareUrl} size={200} />
+            <QRCode 
+              value={shareUrl} 
+              size={200}
+              backgroundColor="white"
+              color="black"
+            />
           </Card.Content>
         </Card>
       ) : null}

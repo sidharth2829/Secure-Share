@@ -68,7 +68,15 @@ export default function ViewScreen ({ route }) {
         <Card.Title title="View Secret" subtitle="Paste link or open from a SecureShare URL" />
         <Card.Content style={{ gap: 12 }}>
           <TextInput label="Share URL" value={url} onChangeText={setUrl} autoCapitalize='none' mode="outlined" />
-          <Button mode="contained" onPress={viewSecret} loading={loading} disabled={!url || loading}>Fetch & Decrypt</Button>
+          <Button 
+            mode="contained" 
+            onPress={viewSecret} 
+            loading={loading} 
+            disabled={!url || loading}
+            contentStyle={{ height: 40 }}
+          >
+            Fetch & Decrypt
+          </Button>
           {error ? <HelperText type="error">{error}</HelperText> : null}
         </Card.Content>
       </Card>
@@ -78,7 +86,13 @@ export default function ViewScreen ({ route }) {
           <Card.Title title="Decrypted Secret" />
           <Card.Content style={{ gap: 12 }}>
             <TextInput value={plaintext} multiline editable={false} mode="outlined" />
-            <Button mode="elevated" onPress={saveOffline}>Save Offline (Secure)</Button>
+            <Button 
+              mode="elevated" 
+              onPress={saveOffline}
+              contentStyle={{ height: 40 }}
+            >
+              Save Offline (Secure)
+            </Button>
           </Card.Content>
         </Card>
       ) : null}

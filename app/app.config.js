@@ -5,13 +5,22 @@ export default ({ config }) => ({
   scheme: 'secureshare',
   version: '0.1.0',
   orientation: 'portrait',
+  icon: './assets/icon.png',
   splash: {
+    image: './assets/splash.png',
     resizeMode: 'contain',
     backgroundColor: '#6750A4'
   },
   ios: { 
     supportsTablet: true,
-    bundleIdentifier: 'com.sidharth2829.secureshare'
+    bundleIdentifier: 'com.sidharth2829.secureshare',
+    infoPlist: {
+      ITSAppUsesNonExemptEncryption: false,
+      NSAppTransportSecurity: {
+        NSAllowsArbitraryLoads: true,
+        NSAllowsArbitraryLoadsInWebContent: true
+      }
+    }
   },
   android: {
     package: 'com.sidharth2829.secureshare',
@@ -24,21 +33,22 @@ export default ({ config }) => ({
       'USE_BIOMETRIC',
       'USE_FINGERPRINT',
       'INTERNET',
-      'ACCESS_NETWORK_STATE'
+      'ACCESS_NETWORK_STATE',
+      'ACCESS_WIFI_STATE'
     ],
     usesCleartextTraffic: true,
     networkSecurityConfig: {
-      'domain-config': [
-        {
-          domain: 'secure-share-production-38a5.up.railway.app',
-          'trust-anchors': ['system']
-        }
-      ]
+      cleartextTrafficPermitted: true
+    },
+    gradle: {
+      kotlinVersion: '2.0.0'
     }
   },
   plugins: [
-    'expo-font'
+    'expo-font',
+    'expo-asset'
   ],
+  newArchEnabled: false,
   extra: {
     API_URL: process.env.API_URL || 'https://secure-share-production-38a5.up.railway.app',
     eas: {
